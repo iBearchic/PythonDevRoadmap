@@ -1,3 +1,3 @@
 # Contents
 
-- [Learn basics](/Basics)
+- [Learn basics](/KnowledgeBase/Basics)
