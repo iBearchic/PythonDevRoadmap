@@ -6,12 +6,12 @@ Here is a Python Developer RoadMap and knowledge base to beat it
 
 ## Goals
 
-1. Learn basics :heavy_check_mark:
-2. Git :heavy_check_mark:
-2.1. Learn the basics of Git and Github :heavy_check_mark:
-2.2. Learn about Git tools like Gitbash :heavy_check_mark:
-2.3. Leran some essential Git commands :heavy_check_mark:
-3. Linux :white_check_mark:
-3.1. Learn the basics of Linux like OS Concepts
-3.2. Learn commands of Linux 
-3.3. Learn about bash shell and shell scripts
+- Learn basics :white_check_mark:
+- Git :white_check_mark:
+  - Learn the basics of Git and Github :heavy_check_mark:
+  - Learn about Git tools like Gitbash :heavy_check_mark:
+  - Learn some essential Git commands :heavy_check_mark:
+- Linux :white_check_mark:
+  - Learn the basics of Linux like OS Concepts
+  - Learn commands of Linux 
+  - Learn about bash shell and shell scripts
