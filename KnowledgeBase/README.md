@@ -1,3 +1,3 @@
 # Contents
 
-- [Learn basics]()
+- [Learn basics](/Basics)
