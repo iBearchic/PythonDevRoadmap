@@ -17,4 +17,6 @@ class FrenchDeck:
 
     def __getitem__(self, position):
         # наглядно показана суть dunder-getitem
+        # за счет данного методы мы открываем весь спектор методов над экземпляром класса FrenchDeck
+        # напримеры, поиск по индексу, срезы и т.п.
         return self._cards[position]
