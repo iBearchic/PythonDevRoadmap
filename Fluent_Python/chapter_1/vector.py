@@ -15,6 +15,10 @@ class Vector:
         return hypot(self.x, self.y)
 
     def __bool__(self):
+        # более быстрая реализация
+        # def __bool__(self):
+        #    return bool(self.x or self.y)
+        
         return bool(abs(self))
 
     def __add__(self, other):
