@@ -1,29 +1,21 @@
-from typing import Annotated, Optional
-from fastapi import Depends, FastAPI
-from pydantic import BaseModel
+from fastapi import FastAPI
+from contextlib import asynccontextmanager
+from database import create_tables, delete_tables
+from router import router as tasks_router
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """
+        Prestart logic
+    """
+    await delete_tables()
+    print("DB was cleaned")
 
-class STaskAdd(BaseModel):
-    name: str
-    description: Optional[str]=None
-
-class STask(STaskAdd):
-    id: int
-
-tasks = []
-
-@app.post("/tasks")
-async def add_task(
-    task: Annotated[STaskAdd, Depends()],
-
-):
-    tasks.append(task)
-    
-    return {"ok": True}
+    await create_tables()
+    print("DB is ready")
+    yield
+    print("Power off")
 
 
-# @app.get("/tasks")
-# async def get_tasks():
-#     task = STask(name="Some task")
-#     return {"data": task}
+app = FastAPI(lifespan=lifespan)
+app.include_router(tasks_router)
