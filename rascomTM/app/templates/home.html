@@ -1,0 +1,150 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h1 class="mainlable">Интеллектуальная Система Управления Задачами</h1>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+{% endwith %}
+
+{% if current_user.is_authenticated %}
+  <h2>Текущие задачи</h2>
+  <br>
+  {% if tasks %}
+    <div class="container">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Название</th>
+            <th scope="col">Плановое время</th>
+            <th scope="col">Степень сложности</th>
+            <th scope="col">##</th>
+            <th scope="col">###</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for task in tasks %}
+            <tr>
+              <th scope="row">{{ task.id }}</th>
+              <td>{{ task.taskname }}</td>
+              <td>{{ task.expected_time }}</td>
+              <td>{{ task.task_hardness }}</td>
+              <td>
+                <a href="{{ url_for('main.edit_task', task_id=task.id) }}" class="btn btn-outline-warning">
+                  Редактировать
+                </a>
+              </td>
+              <td>
+                <form action="{{ url_for('main.delete_task', task_id=task.id) }}" method="post">
+                  <input type="submit" class="btn btn-outline-danger" value="Удалить">
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="container">
+      <h2> На данный момент нет активных задач</h2>
+    </div>
+  {% endif %}
+
+  <h2>Текущие сотрудники</h2>
+  <br>
+  {% if employees %}
+  <div class="container">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Имя</th>
+          <th scope="col">Доступное время</th>
+          <th scope="col">Степень компетенции</th>
+          <th scope="col">Часовой оклад</th>
+          <th scope="col">##</th>
+          <th scope="col">###</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for employee in employees %}
+          <tr>
+            <th scope="row">{{ employee.id }}</th>
+            <td>{{ employee.name }}</td>
+            <td>{{ employee.time_available }}</td>
+            <td>{{ employee.level }}</td>
+            <td>{{ employee.salary }}</td>
+            <td>
+              <a href="{{ url_for('main.edit_employee', employee_id=employee.id) }}" class="btn btn-outline-warning">
+                Редактировать
+              </a>
+            </td>
+            <td>
+              <form action="{{ url_for('main.delete_employee', employee_id=employee.id) }}" method="post">
+                <input type="submit" class="btn btn-outline-danger" value="Удалить">
+              </form>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>     
+  {% else %}
+      <div class="container">
+        <h2> На данный момент нет активных сотрудников</h2>
+      </div>
+  {% endif %}
+
+  <h2>Оптимизация</h2>
+  <div class="container optim">
+    <a href="{{ url_for('main.optimize', mode='time') }}" class="btn btn-outline-success">
+      По срокам
+    </a>
+    <a href="{{ url_for('main.optimize', mode='cost') }}" class="btn btn-outline-success">
+      По затратам
+    </a>
+    <a href="{{ url_for('main.check') }}" class="btn btn-outline-warning">
+      Проверить ресурсы
+    </a>
+  </div>
+  <br>
+  {% if optimum %}
+  <div class="container">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          {% for employee in employees %}
+            <th scope="col">{{ employee.name }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for index in range(tasks|length) %}
+          <tr>
+            <th scope="row">{{ tasks[index].taskname }}</th>
+            {% for val in optimum[index] %}
+              <td>{{ val|round(2) }}</td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>     
+    <div class="container info">
+      <h2>Плановое время: {{ plan_time|round(2) }}</h2> 
+      <h2>Достигнутое время: {{ total_time|round(2) }}</h2> 
+      {% if mode_match == "cost" %}
+      <h2> Затраты: {{ budget|round(2) }}</h2> 
+      {% endif %}
+    </div>
+  {% endif %}
+
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <title> ITMS </title>
+</head>
+<body>
+    <div class="container-fluid main">
+
+        <div class="sidenavbar">
+            {% if current_user.is_authenticated %}
+                <div class="header">
+                    <a href="{{ url_for('main.create_task') }}">
+                        <img src="{{ url_for('static', filename='img/addTask.png') }}" alt="Создать новую задачу">
+                    </a>
+                    <a href="{{ url_for('main.create_employee') }}">
+                        <img src="{{ url_for('static', filename='img/addEmployee.png') }}" alt="Добавить нового сотрудника">
+                    </a>
+                    <a href="/">
+                        <img src="{{ url_for('static', filename='img/homeIcon.png') }}" alt="Главный экран">
+                    </a>
+                </div>
+                <div class="footer">
+                    <p>Пользователь: {{ current_user.username }} <button id="logout-button" class="btn btn-outline-danger">Выйти</button></p>
+                </div>
+            {% else %}
+                <div class="header">
+                    <p>Вход не выполнен. Пожалуйста, <a href="{{ url_for('auth.login') }}">войдите</a> или <a href="{{ url_for('auth.signup') }}">зарегистрируйтесь</a></p>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="content">
+            {% block content %} {% endblock %}
+        </div>
+
+    </div>
+
+    <!-- Таймауты для flash сообщений -->
+    <script>
+        window.setTimeout(function() {
+            $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                $(this).remove(); 
+            });
+        }, 2000);
+    </script>
+
+    <!-- Контроль выхода из учетной записи -->
+    <script>
+        document.getElementById('logout-button').addEventListener('click', function() {
+            location.href = "{{ url_for('auth.logout') }}";
+        });
+    </script>
+</body>
+</html>
